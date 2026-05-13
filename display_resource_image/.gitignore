@@ -43,3 +43,20 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Android local properties
+/android/local.properties
+/android/.gradle/
+
+# iOS/macOS
+/ios/Pods/
+/macos/Pods/
+/ios/Flutter/ephemeral/
+/macos/Flutter/ephemeral/
+
+# Linux/Windows
+/linux/flutter/ephemeral/
+/windows/flutter/ephemeral/
+
+# IDE
+*.iml
