@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants/app_constants.dart';
+import 'package:http/http.dart' as http;
 
 class ImageDisplayScreen extends StatefulWidget {
   const ImageDisplayScreen({super.key});
@@ -10,6 +11,17 @@ class ImageDisplayScreen extends StatefulWidget {
 
 class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
   bool useNetworkImage = false;
+  bool hasLoadedImage = false;
+  late Future<http.Response>? imageFuture;
+
+  Future<http.Response> fetchImage() async {
+
+    final response = await http.get(
+      Uri.parse(AppUrls.imageUrl),
+    );
+    return response;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -31,14 +43,35 @@ class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
                 padding: const EdgeInsets.symmetric(
                     horizontal: AppSizes.imageHorizontalMargin),
                 child: useNetworkImage
-                    ? Image.network(
-                        AppImages.urlImage,
+                ? FutureBuilder<http.Response>( // ネットワークにGETリクエストを送信して画像を取得
+                  future: imageFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 3,
+                          ),
+                        ),
+                      );
+                    } else if (snapshot.hasError) { // エラーが発生したら、centerにエラーメッセージを表示
+                      return Center(
+                        child: Text('Error: Could not load image.'),
+                      );
+                    } else {
+                      return Image.memory(
+                        snapshot.data!.bodyBytes,
                         fit: BoxFit.contain,
-                      )
-                    : Image.asset(
-                        AppImages.resourceImage,
-                        fit: BoxFit.contain,
-                      ),
+                      );
+                    }
+                  },
+                )
+                : Image.asset(
+                  AppImages.resourceImage,
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
             Row(
@@ -56,6 +89,9 @@ class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
                   onPressed: () {
                     setState(() {
                       useNetworkImage = true;
+                      if (!hasLoadedImage) {
+                        imageFuture = fetchImage();
+                      }
                     });
                   },
                   child: const Text('Show Online Image'),
