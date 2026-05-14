@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 void main() => runApp(const DisplayImageApp());
 
@@ -59,6 +60,16 @@ enum ImageDisplayMode {
   none,
 }
 
+class BaseUrlProvider {
+  // ローカルで立てたHTTPサーバーから画像を取得するためのURLを提供するクラス。
+  // Webアプリ(ブラウザ)とAndroidアプリ(エミュレータ)のみ対応。
+  // Androidエミュレーターはホストマシンのローカルホストを直接参照できないため、以下のIPアドレスを使用。
+  static String get value {
+    if (kIsWeb) return 'http://localhost:8080';
+    return 'http://10.0.2.2:8080';
+  }
+}
+
 class _DisplayImagePageState extends State<DisplayImagePage> {
   ImageDisplayMode _displayMode = ImageDisplayMode.none;
 
@@ -116,14 +127,11 @@ class _DisplayImagePageState extends State<DisplayImagePage> {
                   'assets/images/sample_image.png',
                   fit: BoxFit.contain,
                 )
-                    // Online上の画像は、以下のサービスを利用してプレースホルダー画像を表示する。
-                    //   https://placeholdpicsum.dev/。画像サイズやカテゴリを指定して簡単にプレースホルダー画像を生成できるサービス。
-                    //   > Generate custom placeholders via simple URLs. No signup required, free forever.
                     : _displayMode == ImageDisplayMode.network
                     ? Image.network(
-                  'https://placeholdpicsum.dev/photo/600/400',
+                  '${BaseUrlProvider.value}/study/contents/image',
                   fit: BoxFit.contain,
-                    )
+                )
                     : const SizedBox.shrink(),
               ),
             ),
