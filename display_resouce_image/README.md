@@ -22,3 +22,15 @@ Flutterで作成した、画像を表示するアプリケーション。
 ```bash
 flutter run
 ```
+
+## ファイル構成
+
+```
+lib/
+├── main.dart # アプリのエントリーポイント、ルーティング設定
+├── screens/
+│ ├── image_selection_screen.dart # ホーム画面（ボタンから画像表示画面へ遷移）
+│ └── image_display_screen.dart # 画像表示画面（ローカル画像/ネットワーク画像の切り替え）
+└── constants/
+└── app_constants.dart # UI定数と画像パスの管理
+```

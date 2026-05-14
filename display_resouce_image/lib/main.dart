@@ -1,64 +1,22 @@
 import 'package:flutter/material.dart';
+import 'screens/image_selection_screen.dart';
+import 'screens/image_display_screen.dart';
 
 void main() {
-  runApp(const ShowImageApp());
+  runApp(const ImageDisplayApp());
 }
 
-class ShowImageApp extends StatelessWidget {
-  const ShowImageApp({super.key});
+class ImageDisplayApp extends StatelessWidget {
+  const ImageDisplayApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       initialRoute: '/',
       routes: {
-        '/': (context) => const TransImageScene(),
-        '/ShowImage': (context) => const ShowImage(),
+        '/': (context) => const ImageSelectionScreen(),
+        '/display': (context) => const ImageDisplayScreen(),
       },
-    );
-  }
-}
-
-class TransImageScene extends StatelessWidget {
-  const TransImageScene({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Show Image App')),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/ShowImage');
-          },
-          child: const Text('Press to show Image'),
-        ),
-      ),
-    );
-  }
-}
-
-class ShowImage extends StatelessWidget {
-  const ShowImage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('ShowImage'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset('assets/images/hamster.png'),
-            ElevatedButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Back to Home.'),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
