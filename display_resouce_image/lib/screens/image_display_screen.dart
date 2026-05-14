@@ -47,18 +47,18 @@ class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
                 ElevatedButton(
                   onPressed: () {
                     setState(() {
-                      useNetworkImage = true;
+                      useNetworkImage = false;
                     });
                   },
-                  child: const Text('Show UrlImage'),
+                  child: const Text('Show Local Image'),
                 ),
                 ElevatedButton(
                   onPressed: () {
                     setState(() {
-                      useNetworkImage = false;
+                      useNetworkImage = true;
                     });
                   },
-                  child: const Text('Show ResourceImage'),
+                  child: const Text('Show Online Image'),
                 ),
               ],
             ),
