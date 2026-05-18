@@ -1,0 +1,27 @@
+{
+  "type": "padding",
+  "args": {
+    "padding": 16,
+    "child": {
+      "type": "center",
+      "args": {
+        "child": {
+          "type": "aspect_ratio",
+          "args": {
+            "aspectRatio": 1,
+            "child": {
+              "type": "container",
+              "args": {
+                "constraints": {
+                  "maxWidth": 200,
+                  "maxHeight": 200
+                },
+                "color": "#00CC66"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
