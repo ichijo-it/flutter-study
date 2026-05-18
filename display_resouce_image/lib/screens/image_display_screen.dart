@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../constants/app_constants.dart';
 import 'package:http/http.dart' as http;
+import 'package:json_dynamic_widget/json_dynamic_widget.dart';
+import 'dart:convert';
 
 class ImageDisplayScreen extends StatefulWidget {
   const ImageDisplayScreen({super.key});
@@ -13,6 +15,8 @@ class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
   bool useNetworkImage = false;
   bool hasLoadedImage = false;
   late Future<http.Response>? imageFuture;
+
+  Widget? dynamicWidget;
 
   Future<http.Response> fetchImage() async {
 
@@ -42,7 +46,9 @@ class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(
                     horizontal: AppSizes.imageHorizontalMargin),
-                child: useNetworkImage
+                child: dynamicWidget != null
+                    ? dynamicWidget!
+                : useNetworkImage
                 ? FutureBuilder<http.Response>( // ネットワークにGETリクエストを送信して画像を取得
                   future: imageFuture,
                   builder: (context, snapshot) {
@@ -80,6 +86,7 @@ class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
                 ElevatedButton(
                   onPressed: () {
                     setState(() {
+                      dynamicWidget = null;
                       useNetworkImage = false;
                     });
                   },
@@ -88,6 +95,7 @@ class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
                 ElevatedButton(
                   onPressed: () {
                     setState(() {
+                      dynamicWidget = null;
                       useNetworkImage = true;
                       if (!hasLoadedImage) {
                         imageFuture = fetchImage();
@@ -98,6 +106,11 @@ class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
                 ),
               ],
             ),
+            // jsonファイルを読み込んで、ウィジェットを作成して配置するボタン作成
+            ElevatedButton(
+              onPressed: () => fetchDynamicWidget(),
+              child: const Text('Load Dynamic Widget'),
+            ),
             ElevatedButton(
               onPressed: () => Navigator.pop(context),
               child: const Text('Back to Home.'),
@@ -106,5 +119,13 @@ class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> fetchDynamicWidget() async {
+    final response = await http.get(Uri.parse(AppUrls.layoutUrl));
+    final Map<String, dynamic> jsonMap = jsonDecode(response.body);
+    final widgetData = JsonWidgetData.fromDynamic(jsonMap);
+    
+    setState(() => dynamicWidget = widgetData.build(context: context));
   }
 }

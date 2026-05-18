@@ -1,0 +1,25 @@
+{
+  "type": "column",
+  "args": {
+    "mainAxisAlignment": "center",
+    "children": [
+      {
+        "type": "text",
+        "args": {
+          "text": "Dynamic Widget"
+        }
+      },
+      {
+        "type": "elevated_button",
+        "args": {
+          "child": {
+            "type": "text",
+            "args": {
+              "text": "Dynamic Button"
+            }
+          }
+        }
+      }
+    ]
+  }
+}
