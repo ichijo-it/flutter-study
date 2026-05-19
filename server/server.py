@@ -16,6 +16,13 @@ def get_layout():
 
     return jsonify(layout_info)
 
+@app.route('/study/contents/layout/layoutinfo.json')
+def get_layout_info():
+    with open('server/layoutinfo.json', 'r') as f:
+        layout_info = json.load(f)
+
+    return jsonify(layout_info)
+
 if __name__ == '__main__':
     # http://localhost:5000/study/contents/image/hoge.jpg にアクセスすると、hoge.jpgが表示される
     app.run(

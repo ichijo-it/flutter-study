@@ -111,10 +111,19 @@ class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
                 ),
               ],
             ),
-            // jsonファイルを読み込んで、ウィジェットを作成して配置するボタン作成
-            ElevatedButton(
-              onPressed: () => loadDynamicWidget(),
-              child: const Text('Load Dynamic Widget'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () => fetchDynamicWidget(),
+                  child: const Text('Load Widget'),
+                ),
+                // jsonファイルを読み込んで、ウィジェットを作成して配置するボタン作成
+                ElevatedButton(
+                  onPressed: () => loadDynamicWidget(),
+                  child: const Text('Load Dynamic Widget'),
+                )
+              ]
             ),
             ElevatedButton(
               onPressed: () => Navigator.pop(context),
@@ -127,7 +136,7 @@ class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
   }
 
   Future<void> fetchDynamicWidget() async {
-    final response = await http.get(Uri.parse(AppUrls.layoutUrl));
+    final response = await http.get(Uri.parse(AppUrls.layoutInfoUrl));
     final Map<String, dynamic> jsonMap = jsonDecode(response.body);
     final widgetData = JsonWidgetData.fromDynamic(jsonMap);
     
