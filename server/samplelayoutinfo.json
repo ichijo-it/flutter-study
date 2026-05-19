@@ -1,0 +1,32 @@
+{
+    "VerticalContainer": {
+        "Width": 100,
+        "Height": 300,
+        "Color": "Green",
+        "Children": [
+            {
+                "Label": {
+                   "Width": 100,
+                   "Height": 100,
+                   "TextColor": "Black",
+                   "Text": "Text1"
+                }
+            },
+            {
+                "Label": {
+                   "Width": 100,
+                   "Height": 100,
+                   "TextColor": "Black",
+                   "Text": "Text2"
+                }
+            },
+            {
+                "Image": {
+                   "Width": 100,
+                   "Height": 100,
+                   "Url": "http://10.0.2.2:5000/study/contents/image/hoge.jpg"
+                }
+            }
+        ]
+    }
+}

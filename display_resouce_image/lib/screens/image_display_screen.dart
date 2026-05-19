@@ -3,6 +3,7 @@ import '../constants/app_constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:json_dynamic_widget/json_dynamic_widget.dart';
 import 'dart:convert';
+import '../parsers/widget_parser.dart';
 
 class ImageDisplayScreen extends StatefulWidget {
   const ImageDisplayScreen({super.key});
@@ -43,12 +44,16 @@ class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
             SizedBox(
               height: screenHeight * 0.4,
               width: screenWidth,
-              child: Padding(
+              child: dynamicWidget != null
+              ? Align(
+                alignment: Alignment.center,
+                child: dynamicWidget!,
+              )
+              : Padding(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: AppSizes.imageHorizontalMargin),
-                child: dynamicWidget != null
-                    ? dynamicWidget!
-                : useNetworkImage
+                  horizontal: AppSizes.imageHorizontalMargin,
+                ),
+                child: useNetworkImage
                 ? FutureBuilder<http.Response>( // ネットワークにGETリクエストを送信して画像を取得
                   future: imageFuture,
                   builder: (context, snapshot) {
@@ -108,7 +113,7 @@ class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
             ),
             // jsonファイルを読み込んで、ウィジェットを作成して配置するボタン作成
             ElevatedButton(
-              onPressed: () => fetchDynamicWidget(),
+              onPressed: () => loadDynamicWidget(),
               child: const Text('Load Dynamic Widget'),
             ),
             ElevatedButton(
@@ -127,5 +132,13 @@ class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
     final widgetData = JsonWidgetData.fromDynamic(jsonMap);
     
     setState(() => dynamicWidget = widgetData.build(context: context));
+  }
+
+  Future<void> loadDynamicWidget() async {
+    final response = await http.get(Uri.parse(AppUrls.layoutUrl));
+    //WidgetParserを使って、jsonからWidgetを作成する
+    final Map<String, dynamic> jsonMap = jsonDecode(response.body);
+    final widget = buildWidget(jsonMap);
+    setState(() => dynamicWidget = widget);
   }
 }

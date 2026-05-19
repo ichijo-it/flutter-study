@@ -11,7 +11,7 @@ def get_image():
 
 @app.route('/study/contents/layout')
 def get_layout():
-    with open('server/layoutinfo.json', 'r') as f:
+    with open('server/samplelayoutinfo.json', 'r') as f:
         layout_info = json.load(f)
 
     return jsonify(layout_info)
