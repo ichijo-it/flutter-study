@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:convert';
 
 void main() async {
   final server = await HttpServer.bind(
@@ -14,9 +13,6 @@ void main() async {
 
     print(req.uri.path);
 
-    // =========================
-    // 画像エンドポイント
-    // =========================
     if (req.method == "GET" && req.uri.path == "/study/contents/image") {
       final file = File("image/hoge.jpg");
 
@@ -31,9 +27,6 @@ void main() async {
       }
     }
 
-    // =========================
-    // JSONエンドポイント（追加）
-    // =========================
     else if (req.method == "GET" && req.uri.path == "/study/contents/layout") {
       final file = File("layout/sample_layout.json");
       
@@ -48,9 +41,6 @@ void main() async {
         }
     }
 
-    // =========================
-    // それ以外
-    // =========================
     else {
       req.response.statusCode = 404;
       req.response.write("not found");
