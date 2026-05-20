@@ -18,7 +18,7 @@ void main() async {
 
       if (await file.exists()) {
         req.response.headers.contentType =
-            ContentType("image", "jpg");
+            ContentType("image", "jpeg");
 
         await req.response.addStream(file.openRead());
       } else {
@@ -39,6 +39,23 @@ void main() async {
         req.response.statusCode = 404;
         req.response.write("layout json not found");
         }
+    }
+
+    else if (req.method == "GET" && req.uri.path == "/study/contents/custom-layout") {
+      final file = File("layout/custom_layout.json");
+
+      if (await file.exists()) {
+        final jsonText = await file.readAsString();
+
+        req.response.headers.contentType =
+            ContentType("application", "json");
+
+        req.response.write(jsonText);
+      }
+      else {
+        req.response.statusCode = 404;
+        req.response.write("custom layout json not found");
+      }
     }
 
     else {

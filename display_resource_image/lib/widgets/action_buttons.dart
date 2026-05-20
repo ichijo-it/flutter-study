@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class ActionButtons extends StatelessWidget {
   final VoidCallback onBack;
   final VoidCallback onShowJsonUi;
+  final VoidCallback onShowCustomJsonUi;
 
   const ActionButtons({
     super.key,
     required this.onBack,
     required this.onShowJsonUi,
+    required this.onShowCustomJsonUi,
   });
 
   @override
@@ -29,7 +31,16 @@ class ActionButtons extends StatelessWidget {
             child: Center(
               child: ElevatedButton(
                 onPressed: onShowJsonUi,
-                child: const Text('Go JSON UI'),
+                child: const Text('JSON UI'),
+              ),
+            ),
+          ),
+
+          Expanded(
+            child: Center(
+              child: ElevatedButton(
+                onPressed: onShowCustomJsonUi,
+                child: const Text('Custom JSON UI'),
               ),
             ),
           ),

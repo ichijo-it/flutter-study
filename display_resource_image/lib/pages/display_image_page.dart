@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../utils/base_url_provider.dart';
 import '../services/json_ui_service.dart';
+import '../services/custom_json_ui_service.dart';
 import '../models/display_mode.dart';
 import '../widgets/action_buttons.dart';
 import '../widgets/display_content.dart';
@@ -13,12 +14,13 @@ class DisplayImagePage extends StatefulWidget {
   @override
   State<DisplayImagePage> createState() => _DisplayImagePageState();
 }
-
 class _DisplayImagePageState extends State<DisplayImagePage> {
   ImageDisplayMode _imageDisplay = ImageDisplayMode.none;
   final JsonUIService _jsonUIService = JsonUIService();
+  final CustomJsonUIService _customJsonUIService = CustomJsonUIService();
 
   bool _useJsonUI = false;
+  bool _useCustomJsonUI = false;
 
   Future<void> _showJsonUI() async {
     await _jsonUIService.loadFromUrl(
@@ -26,14 +28,36 @@ class _DisplayImagePageState extends State<DisplayImagePage> {
     );
     setState(() {
       _imageDisplay = ImageDisplayMode.none;
+
+      // JSON UI表示
       _useJsonUI = true;
+      // Custom JSON UIはOFF
+      _useCustomJsonUI = false;
+    });
+  }
+
+  Future<void> _showCustomJsonUI() async {
+    await _customJsonUIService.loadFromUrl(
+      '${BaseUrlProvider.value}/study/contents/custom-layout',
+    );
+
+    setState(() {
+      _imageDisplay = ImageDisplayMode.none;
+
+      // Custom JSON UI表示
+      _useCustomJsonUI = true;
+      // JSON UIはOFF
+      _useJsonUI = false;
     });
   }
 
   void _updateDisplayMode(ImageDisplayMode mode) {
     setState(() {
       _imageDisplay = mode;
+
+      // 画像表示時は両JSON UIをOFF
       _useJsonUI = false;
+      _useCustomJsonUI = false;
     });
   }
 
@@ -65,7 +89,9 @@ class _DisplayImagePageState extends State<DisplayImagePage> {
             child: DisplayContent(
               imageDisplay: _imageDisplay,
               useJsonUI: _useJsonUI,
+              useCustomJsonUI: _useCustomJsonUI,
               jsonUIService: _jsonUIService,
+              customJsonUIService: _customJsonUIService,
             ),
           ),
 
@@ -75,6 +101,7 @@ class _DisplayImagePageState extends State<DisplayImagePage> {
             child: ActionButtons(
               onBack: _goBack,
               onShowJsonUi: _showJsonUI,
+              onShowCustomJsonUi: _showCustomJsonUI,
             ),
           ),
         ],
